@@ -629,9 +629,9 @@ def main(dataset_config_path: str, partnet_mobility_dir: str, data_root_path: st
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Render interaction simulation for PartNet Mobility dataset.")
-    parser.add_argument("--meta_file_path", type=str, default="new_partnet_mobility_dataset_correct_intr_meta.json")
+    parser.add_argument("--meta_file_path", type=str, default="hf_dataset/new_partnet_mobility_dataset_correct_intr_meta.json")
     parser.add_argument("--partnet_mobility_path", type=str, default="partnet-mobility-v0/")
-    parser.add_argument("--data_root_path", type=str, default="sim_data/partnet_mobility/")
+    parser.add_argument("--data_root_path", type=str, default="hf_dataset/sim_data/partnet_mobility/")
     args = parser.parse_args()
-    main(args.meta_file_path, args.data_root_path, True, "rgb")
-    main(args.meta_file_path, args.data_root_path, False, "xyz")
+    main(args.meta_file_path, args.partnet_mobility_path, args.data_root_path, True, "rgb")
+    main(args.meta_file_path, args.partnet_mobility_path, args.data_root_path, False, "xyz")

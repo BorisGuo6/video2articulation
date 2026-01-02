@@ -75,24 +75,79 @@ echo "Synthetic dataset downloaded successfully!"
 echo ""
 echo "[2/3] PartNet-Mobility Dataset"
 echo "============================================"
-echo "Please manually download PartNet-Mobility Dataset from:"
-echo "  https://sapien.ucsd.edu/downloads"
-echo ""
-echo "After downloading, extract it to: $SCRIPT_DIR/partnet-mobility-v0/"
-echo ""
-echo "Expected structure:"
-echo "  partnet-mobility-v0/"
-echo "      |__148/"
-echo "      |__149/"
-echo "      ..."
-echo ""
 
 # Check if partnet-mobility-v0 exists
 if [ -d "partnet-mobility-v0" ]; then
-    echo "PartNet-Mobility dataset found!"
+    echo "PartNet-Mobility dataset already exists!"
 else
-    echo "WARNING: PartNet-Mobility dataset not found at $SCRIPT_DIR/partnet-mobility-v0/"
-    echo "Please download it manually."
+    echo "PartNet-Mobility dataset not found. Attempting to download..."
+    echo ""
+    
+    # Check for SAPIEN_TOKEN (default token available)
+    SAPIEN_TOKEN="${SAPIEN_TOKEN:-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IjIxMDMyMDgyNkBzdHUuaGl0LmVkdS5jbiIsImlwIjoiMTcyLjIwLjAuMSIsInByaXZpbGVnZSI6MSwiZmlsZU9ubHkiOnRydWUsImlhdCI6MTc2NzMzNzQwNywiZXhwIjoxNzk4ODczNDA3fQ.DDrq2p4DY22P7AZOdJhp3kxJsgGMt4cAzQaUXLo5tyA}"
+    
+    if [ -z "$SAPIEN_TOKEN" ]; then
+        echo "SAPIEN_TOKEN not set."
+        echo ""
+        echo "To download PartNet-Mobility Dataset:"
+        echo "  1. Register at https://sapien.ucsd.edu/downloads (use .edu email)"
+        echo "  2. Wait for verification"
+        echo "  3. Get your API token from the website"
+        echo "  4. Set: export SAPIEN_TOKEN='your_token_here'"
+        echo "  5. Re-run this script"
+        echo ""
+        echo "Or manually download and extract to: $SCRIPT_DIR/partnet-mobility-v0/"
+        echo ""
+    else
+        echo "Found SAPIEN_TOKEN. Downloading PartNet-Mobility dataset..."
+        pip install -q sapien
+        
+        python -c "
+import sapien
+import os
+
+token = os.environ.get('SAPIEN_TOKEN')
+if not token:
+    print('ERROR: SAPIEN_TOKEN not set')
+    exit(1)
+
+# List of common model IDs to download (you can modify this list)
+# Full dataset has ~2000+ models, here we download essential ones
+model_ids = [
+    # Microwave
+    7265, 7263, 7236,
+    # Refrigerator
+    10638, 10905, 11231,
+    # Dishwasher
+    12085, 12349,
+    # Oven
+    7119, 7128, 7167,
+    # Cabinet/Storage
+    45245, 45332, 46123,
+    # Door
+    8867, 8877, 8893,
+    # Drawer
+    45623, 46440, 46877,
+    # Laptop
+    10211, 10239, 10306,
+    # Washing Machine
+    7236, 7310,
+]
+
+print(f'Downloading {len(model_ids)} models...')
+os.makedirs('partnet-mobility-v0', exist_ok=True)
+
+for i, model_id in enumerate(model_ids):
+    try:
+        print(f'[{i+1}/{len(model_ids)}] Downloading model {model_id}...')
+        urdf_file = sapien.asset.download_partnet_mobility(model_id, token)
+        print(f'  Downloaded to: {urdf_file}')
+    except Exception as e:
+        print(f'  Failed to download model {model_id}: {e}')
+
+print('PartNet-Mobility download completed!')
+"
+    fi
 fi
 
 # ============================================
