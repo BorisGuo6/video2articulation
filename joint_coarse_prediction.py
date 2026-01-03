@@ -438,7 +438,7 @@ if __name__ == "__main__":
     parser.add_argument("--view_dir", type=str, required=True)
     parser.add_argument("--preprocess_dir", type=str, required=True)
     parser.add_argument("--prediction_dir", type=str, required=True)
-    parser.add_argument("--meta_file_path", type=str, default="new_partnet_mobility_dataset_correct_intr_meta.json", help="Only required for sim data, the path to the metadata file.")
+    parser.add_argument("--meta_file_path", type=str, default="hf_dataset/new_partnet_mobility_dataset_correct_intr_meta.json", help="Only required for sim data, the path to the metadata file.")
     parser.add_argument("--mask_type", type=str, choices=["gt", "monst3r"], required=True)
     parser.add_argument("--seed", type=int, default=0)
     args = parser.parse_args()

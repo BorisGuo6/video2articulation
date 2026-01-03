@@ -3,3 +3,10 @@ real_data/
 partnet-mobility-v0
 __pycache__/
 *.pyc
+
+# Example results (too large)
+example/*/results/
+*.log
+
+# HuggingFace dataset cache
+hf_dataset/

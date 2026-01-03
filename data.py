@@ -121,6 +121,7 @@ class SimDataLoader(DataLoader):
 
         norm_view_dir = os.path.normpath(view_dir)
         self.video_dir = norm_view_dir
+        self.view_dir = norm_view_dir  # alias for compatibility
         self.joint_data_dir = os.path.dirname(norm_view_dir)
         print(self.joint_data_dir)
         folder_names = norm_view_dir.strip("/").split("/")
@@ -363,7 +364,9 @@ class RealDataLoader(DataLoader):
         surface_xyz = np.asarray(surface_pcd.points)
         surface_rgb = np.asarray(surface_pcd.colors) * 255
         surface_rgb = surface_rgb.astype(np.uint8)
-        sample_index = np.random.choice(np.arange(surface_rgb.shape[0]), sample_num, replace=False)
+        # Use replace=True if sample_num > available points
+        replace = sample_num > surface_rgb.shape[0]
+        sample_index = np.random.choice(np.arange(surface_rgb.shape[0]), sample_num, replace=replace)
         surface_rgb = surface_rgb[sample_index]
         surface_xyz = surface_xyz[sample_index]
         return surface_rgb, surface_xyz

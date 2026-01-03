@@ -10,3 +10,6 @@
 [submodule "Grounded-SAM-2"]
 	path = Grounded-SAM-2
 	url = https://github.com/willipwk/Grounded-SAM-2.git
+[submodule "NKSR"]
+	path = NKSR
+	url = https://github.com/nv-tlabs/NKSR.git
